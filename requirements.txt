@@ -3,3 +3,4 @@ faiss-cpu
 PyPDF2
 sentence-transformers
 transformers
+langchain
