@@ -13,7 +13,7 @@ if uploaded_file:
         index, embed_model, documents = create_vector_store(raw_text)
 
     # Load Q&A model from Hugging Face
-    qa_pipeline = pipeline("text2text-generation", model="google/flan-t5-base", device=0 if st.checkbox("Use GPU") else -1)
+    qa_pipeline = pipeline("text2text-generation", model="google/flan-t5-small", device=0 if st.checkbox("Use GPU") else -1)
 
     st.success("You can now ask questions!")
 
