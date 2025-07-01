@@ -1,6 +1,7 @@
 import streamlit as st
 from utils import extract_text_from_pdf, create_vector_store
 from transformers import pipeline
+import torch
 
 st.set_page_config(page_title="Free Chat with Your Notes", layout="wide")
 st.title("📚 Chat with Your Notes (Open Source)")
@@ -15,10 +16,12 @@ if uploaded_file:
 
     # Load Q&A model from Hugging Face securely
     qa_pipeline = pipeline(
-    "text2text-generation",
-    model="google/flan-t5-base",
-    token=st.secrets["HF_TOKEN"]
+    "text-generation",
+    model="mistralai/Mistral-7B-Instruct-v0.2",
+    torch_dtype=torch.float16,
+    device_map="auto"
 )
+
 
 
     st.success("You can now ask questions!")
