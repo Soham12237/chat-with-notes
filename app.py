@@ -13,8 +13,11 @@ if uploaded_file:
         index, embed_model, documents = create_vector_store(raw_text)
 
     # Load Q&A model from Hugging Face
-    qa_pipeline = pipeline("text2text-generation", model="google/flan-t5-small", device=0 if st.checkbox("Use GPU") else -1)
-
+    qa_pipeline = pipeline(
+        "text2text-generation",
+        model="mistralai/Mistral-7B-Instruct-v0.2",
+        use_auth_token="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"
+    )
     st.success("You can now ask questions!")
 
     question = st.text_input("Ask a question based on the uploaded PDF:")
