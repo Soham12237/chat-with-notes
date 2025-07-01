@@ -16,10 +16,8 @@ if uploaded_file:
 
     # Load Q&A model from Hugging Face securely
     qa_pipeline = pipeline(
-    "text-generation",
-    model="mistralai/Mistral-7B-Instruct-v0.2",
-    torch_dtype=torch.float16,
-    device_map="auto"
+    "text2text-generation",
+    model="google/flan-t5-large"
 )
 
 
