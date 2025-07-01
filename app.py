@@ -6,18 +6,20 @@ st.set_page_config(page_title="Free Chat with Your Notes", layout="wide")
 st.title("📚 Chat with Your Notes (Open Source)")
 
 uploaded_file = st.file_uploader("Upload a PDF", type="pdf")
+
 if uploaded_file:
     st.success("PDF uploaded successfully.")
     with st.spinner("Extracting text and building knowledge base..."):
         raw_text = extract_text_from_pdf(uploaded_file)
         index, embed_model, documents = create_vector_store(raw_text)
 
-    # Load Q&A model from Hugging Face
+    # Load Q&A model from Hugging Face securely
     qa_pipeline = pipeline(
         "text2text-generation",
         model="mistralai/Mistral-7B-Instruct-v0.2",
-        use_auth_token="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"
+        use_auth_token=st.secrets["HF_TOKEN"]
     )
+
     st.success("You can now ask questions!")
 
     question = st.text_input("Ask a question based on the uploaded PDF:")
