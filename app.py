@@ -16,7 +16,7 @@ if uploaded_file:
     # Load Q&A model from Hugging Face securely
     qa_pipeline = pipeline(
         "text2text-generation",
-        model="mistralai/Mistral-7B-Instruct-v0.2",
+        model="sentence-transformers/all-MiniLM-L6-v2",
         use_auth_token=st.secrets["HF_TOKEN"]
     )
 
