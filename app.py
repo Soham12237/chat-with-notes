@@ -1,9 +1,9 @@
 import streamlit as st
 from utils import extract_text_from_pdf, create_vector_store
-from sklearn.metrics.pairwise import cosine_similarity
+from transformers import pipeline
 
-st.set_page_config(page_title="Chat with Your Notes (Offline)", layout="wide")
-st.title("📚 Chat with Your Notes (No Hugging Face)")
+st.set_page_config(page_title="Free Chat with Your Notes", layout="wide")
+st.title("📚 Chat with Your Notes (Open Source)")
 
 uploaded_file = st.file_uploader("Upload a PDF", type="pdf")
 
@@ -11,16 +11,28 @@ if uploaded_file:
     st.success("PDF uploaded successfully.")
     with st.spinner("Extracting text and building knowledge base..."):
         raw_text = extract_text_from_pdf(uploaded_file)
-        vectorizer, vectors, documents = create_vector_store(raw_text)
+        index, embed_model, documents = create_vector_store(raw_text)
+
+    # Load Q&A model from Hugging Face securely
+    qa_pipeline = pipeline(
+        "text2text-generation",
+        model="sentence-transformers/all-MiniLM-L6-v2",
+        use_auth_token=st.secrets["HF_TOKEN"]
+    )
 
     st.success("You can now ask questions!")
 
     question = st.text_input("Ask a question based on the uploaded PDF:")
     if question:
-        question_vec = vectorizer.transform([question])
-        similarities = cosine_similarity(question_vec, vectors)[0]
-        top_indices = similarities.argsort()[-3:][::-1]
-        context = "\n\n".join([documents[i].page_content for i in top_indices])
+        # Embed question and retrieve top 5 docs
+        question_vec = embed_model.encode([question])
+        top_k = 5
+        D, I = index.search(question_vec, top_k)
+        context = "\n".join([documents[i].page_content for i in I[0]])
 
-        st.write("### 🤖 Best Matching Sections")
-        st.write(context)
+        # Ask the model
+        prompt = f"Answer the question based on the context below:\n\nContext:\n{context}\n\nQuestion: {question}"
+        with st.spinner("Thinking..."):
+            response = qa_pipeline(prompt, max_new_tokens=256)[0]['generated_text']
+            st.write("### 🤖 Answer")
+            st.write(response)
