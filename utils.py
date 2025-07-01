@@ -19,7 +19,7 @@ def create_vector_store(text):
         chunks.append(text[i:i+chunk_size])
     
     # Use sentence-transformers for embedding
-    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2", use_auth_token=st.secrets["HF_TOKEN"])
+    model = SentenceTransformer("BAAI/bge-small-en-v1.5") 
     vectors = model.encode(chunks)
 
     # Store in FAISS

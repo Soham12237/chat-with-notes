@@ -15,10 +15,9 @@ if uploaded_file:
 
     # Load Q&A model from Hugging Face securely
     qa_pipeline = pipeline(
-        "text2text-generation",
-        model="sentence-transformers/all-MiniLM-L6-v2",
-        use_auth_token=st.secrets["HF_TOKEN"]
-    )
+    "text2text-generation",
+    model="google/flan-t5-base"  # No token needed
+)
 
     st.success("You can now ask questions!")
 
