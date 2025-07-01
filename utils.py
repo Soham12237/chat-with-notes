@@ -2,6 +2,9 @@ from PyPDF2 import PdfReader
 from sentence_transformers import SentenceTransformer
 from langchain.docstore.document import Document
 import faiss
+from sentence_transformers import SentenceTransformer
+import streamlit as st
+
 
 def extract_text_from_pdf(file):
     reader = PdfReader(file)
@@ -16,7 +19,7 @@ def create_vector_store(text):
         chunks.append(text[i:i+chunk_size])
     
     # Use sentence-transformers for embedding
-    model = SentenceTransformer("all-MiniLM-L6-v2")
+    model = SentenceTransformer("all-MiniLM-L6-v2", use_auth_token=st.secrets["HF_TOKEN"])
     vectors = model.encode(chunks)
 
     # Store in FAISS
