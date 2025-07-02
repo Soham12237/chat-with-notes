@@ -14,7 +14,7 @@ if uploaded_file:
         raw_text = extract_text_from_pdf(uploaded_file)
         index, embed_model, documents = create_vector_store(raw_text)
 
-    # Load Q&A model from Hugging Face securely
+    
     qa_pipeline = pipeline(
     "text2text-generation",
     model="google/gemma-3n-E4B-it"
@@ -26,13 +26,13 @@ if uploaded_file:
 
     question = st.text_input("Ask a question based on the uploaded PDF:")
     if question:
-        # Embed question and retrieve top 5 docs
+        
         question_vec = embed_model.encode([question])
         top_k = 5
         D, I = index.search(question_vec, top_k)
         context = "\n".join([documents[i].page_content for i in I[0]])
 
-        # Ask the model
+    
         prompt = f"Answer the question based on the context below:\n\nContext:\n{context}\n\nQuestion: {question}"
         with st.spinner("Thinking..."):
             response = qa_pipeline(prompt, max_new_tokens=256)[0]['generated_text']
