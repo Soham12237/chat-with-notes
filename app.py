@@ -17,7 +17,7 @@ if uploaded_file:
     # Load Q&A model from Hugging Face securely
     qa_pipeline = pipeline(
     "text2text-generation",
-    model="google/gemma-3n-E4B-it"
+    model="google/flan-t5-large"
 )
 
 
