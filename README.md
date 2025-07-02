@@ -19,6 +19,7 @@ This is a Streamlit web application that allows users to upload a PDF document a
 
 Create a directory .streamlit/secrets.toml and put the content in the PDF uploaded inside the file. 
 Host locally using streamlit run app.py in bash or command prompt. There is automatic redirection to browser for web app deployment. 
+If HuggingFace deactivates the token for some reason, please get a new token from their official website and replace the token in secrets.toml with the new one.
 
 
 Install all dependencies using:
